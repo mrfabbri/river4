@@ -1,0 +1,23 @@
+{
+  "env" : {
+    "node" : true
+  },
+  "rules" : {
+    "space-infix-ops": false,
+    "no-spaced-func": false,
+    "no-trailing-spaces": false,
+
+    "no-unused-vars": true,
+    "quotes": false,
+    "eqeqeq": true,
+
+    "no-inner-declarations": false,
+    "camelcase": false,
+    "semi": false,
+    "no-array-constructor": false,
+    "no-new-object": false,
+    "new-cap": false,
+
+    "strict" : false
+  }
+}

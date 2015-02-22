@@ -166,16 +166,20 @@ function s3Redirect (path, url) { //1/30/14 by DW -- doesn't appear to work -- d
 		};
 	s3.putObject (params, function (err, data) { 
 		if (err != null) {
-			consoleLog ("s3Redirect: err.message = " + err.message + ".");
+			console.log ("s3Redirect: err.message = " + err.message + ".");
 			}
 		else {
-			consoleLog ("s3Redirect: path = " + path + ", url = " + url + ", data = ", JSON.stringify (data));
+			console.log ("s3Redirect: path = " + path + ", url = " + url + ", data = ", JSON.stringify (data));
 			}
 		});
 	}
 function s3GetObjectMetadata (path, callback) {
 	var params = s3SplitPath (path);
 	s3.headObject (params, function (err, data) {
+		if (err) {
+			console.error ("s3GetObjectMetadata: err.message = " + err.message + ".");
+			return;
+			}
 		callback (data);
 		});
 	}
@@ -1321,6 +1325,9 @@ function fsGetObject (path, callback) {
 	}
 function fsListObjects (path, callback) {
 	fs.readdir (path, function (err, list) {
+		if (err) {
+			console.error ("fsListObjects: errorr == " + err.message + ".");
+		}
 		if (!endsWith (path, "/")) {
 			path += "/";
 			}
@@ -2174,6 +2181,7 @@ function initList (name, callback) {
 		}
 	infofilepath = s3ListsDataFolder + foldername + "/listInfo.json";
 	stGetObject (infofilepath, function (error, data) {
+		var obj;
 		if (error) {
 			obj = new Object ();
 			}
@@ -2546,7 +2554,8 @@ function handleRequest (httpRequest, httpResponse) {
 					case "/loadlists":
 						loadListsFromFolder ();
 						httpResponse.writeHead (200, {"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*"});
-						httpResponse.end ("We're reading the lists, right now, as we speak.");    
+						httpResponse.end ("We're reading the lists, right now, as we speak.");
+						break;
 					case "/dashboard": //6/2/14 by DW
 						httpResponse.writeHead (200, {"Content-Type": "text/html"});
 						request (urlDashboardSource, function (error, response, htmltext) {
